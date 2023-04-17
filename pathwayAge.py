@@ -55,9 +55,33 @@ def pathwayAge(
     hyperParam: Optional[dict]= None,
     cores: Optional[int]= 5,
 ):
-    """
-
-
+    """ pathwayAge for Age prediction
+   this estimator builds a two-stage model for biological age prediction.
+   It allows for the optimization of arbitrary differentiable regression model.
+   In each stage a regression optimization is allowed.
+   If methylTestData not provided, pathwayAge will predict suject age in methylTestData 
+   by Cross Validation. 
+   Parameters
+   ----------
+   methylData: methylation matrix with Age info;
+   resultName: output file name;
+   methylTestData: test data, default empty dataframe;
+   restrictUp: the upper limit of number of genes in one pathway, default 200;
+   restrictDown: the lower limit of number of genes in one pathway, default 10;
+   minPathSize: CpG sites minimal number in each pathway, default 5;
+   nfold: N-fold of cross validation, default 5;
+   randomState: seed for random number generator, default 6677;
+   predictionMode: regression model, default GradientBoosting;
+   reconData: the way of generate the stage1 data(the age score of each BP pathway).
+        #TODO
+        default False
+   tuneHyperParam: whether tuning the hyperparamter of each regression stage or not.
+        default False;
+    
+   hyperParam: hyperparameter of regression model, default None;
+   cores: number of processors on the machine, default 5.
+   return
+   ----------
 
     """
     cpgAnno, golist= metaData()
@@ -76,7 +100,7 @@ def pathwayAge(
         reconData = True
         print("no specified test data, parameter reconData FORCE to be TURE!")
         _, cvList = stage1(
-            methyl2PathList[:5],
+            methyl2PathList,
             age,
             nfold=nfold,
             randomState = randomState,
@@ -99,7 +123,7 @@ def pathwayAge(
         )
     else:
         data4Stage2, _ = stage1(
-                methyl2PathList[:5],
+                methyl2PathList,
                 age,
                 nfold=nfold,
                 randomState = randomState,
@@ -122,7 +146,7 @@ def pathwayAge(
         )  
 
         _, cvList = stage1(
-            methyl2PathTestList[:5],
+            methyl2PathTestList,
             age = testAge,
             nfold=nfold,
             randomState = randomState,
@@ -144,68 +168,3 @@ def pathwayAge(
             tuneHyperParam = tuneHyperParam,
             hyperParam = hyperParam,
         )
-
-
-# to test pathwayAge
-
-methylData = "./data/methlyData.csv"
-covariateData =  "./data/covariateData.csv"
-predictionMode = "SVR"
-nfold = 3
-randomState = 00
-reconData = True
-tuneHyperParam = True
-cores = 10
-### GB ###
-# hyperParam = { 
-#  'learning_rate': np.arange(0.05,0.21,0.05),
-# }
-### SVM ###
-hyperParam = {
-    "kernel": ["rbf", "poly"],
-    "C": [20, 10, 1, 0.1],
-    # "epsilon": [0.001, 0.01, 0.1, 1]
-}
-
-methylData = pd.read_csv(methylData, index_col="CpG")
-methylData = methylData.T
-testData = methylData.iloc[:100,:10000]
-covariateData = pd.read_csv(covariateData, index_col ="Sample")
-age = covariateData["Age"]
-methylDataAge = testData.join(age)
-methylTestData = methylData.iloc[101:201,:10000]
-methylTestData = methylTestData.join(age)
-resultName = "Emmaaaaa"
-
-startread = time.time()
-
-pathwayAge(
-    methylData = methylDataAge,
-    resultName = resultName,
-    minPathSize = 10,
-    nfold = nfold,
-    tuneHyperParam  = tuneHyperParam,
-    hyperParam = hyperParam,
-    cores= cores,
-    methylTestData = methylTestData,
-    predictionMode = predictionMode,
-)
-
-endDeal = time.time()
-print("Data dealed in {} seconds".format(endDeal - startread))
-
-
-# hyperParam = { 
-# 'learning_rate': np.arange(0.05,0.21,0.05),
-# }
-
-# cwd = os.getcwd()
-# folderPath = cwd + "/" + resultFolderName
-# Path(folderPath).mkdir(parents=True, exist_ok=True)
-# path = folderPath + "/{}"
-# outerPath = folderPath + "/dataForStage2Regression_fold{}.csv"
-
-# hyperParam = { 
-#    "max_features": "sqrt",
-#    "random_state": 20,
-#     }
