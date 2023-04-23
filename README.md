@@ -16,7 +16,7 @@ conda env create -f pyBioTrans.yml
 
 ## Installation:
 Example usage:
-```bash
+```python
 import pathwayAge from pathwayAge
 
 pathwayAge(
