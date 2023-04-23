@@ -1,4 +1,6 @@
 # pathwayAge
+
+PathwayAge is a 2-stage biological age predictor that first builds separate machine learning models for methylation sites mapping to each of the BP pathways, yielding 1 machine-learning model per pathway (first-stage). This procedure compresses data from individual methylation sites into a pathway-level feature. Then, a second-stage algorithm integrates these pathway-level features into a systems-level regression.
  
 ## Installation:
 
