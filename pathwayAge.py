@@ -1,20 +1,13 @@
 from A00omics2pathlist import omics2pathlist
-from A01resampling import resample
-from A02prediction import prediction
 from A03supp_age import ageTransfer
 from A04stage1 import stage1
 from A05stage2 import stage2, stage2pediction
 from xmlrpc.client import boolean
-from itertools import repeat
 import pandas as pd
-import numpy as np
-from typing import List, Optional
-import time
-from functools import reduce
+from typing import Optional
 import json
 import yaml
-import os
-from pathlib import Path
+
 
 import warnings
 warnings.simplefilter('ignore')
