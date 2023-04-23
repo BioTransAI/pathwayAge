@@ -17,4 +17,10 @@ Example usage:
 ```bash
 import pathwayAge from pathwayAge
 
+pathwayAge(
+    methylData = methylDataAge,
+    methylTestData = methylTestData,
+    resultName = "bioAgePrediction",
+)
+
 ```
