@@ -10,6 +10,7 @@ import pandas as pd
 from typing import List, Optional
 import time
 from functools import reduce
+import numpy as np
 
 
 
@@ -49,11 +50,15 @@ def dataForStage2(
 ):
   """
   generate the data for stage2. 
-  data: a dataframe contains CpG in one pathway; d
+  data: a dataframe contains CpG in one pathway; 
   predictionMode: can be swithed for different tasks, here we ues "GradientBoosting";
   i: ith fold of cross validation;
   return: a dataframe -> prediction mean based on nfold inner training data models.
   """
+  indexOrder = pd.DataFrame(
+    index=data.index, 
+    columns=["rank"], 
+    data = np.arange(data.shape[0]))
   data = resample(
             trainData = data, 
             nfold = nfold,
@@ -68,5 +73,7 @@ def dataForStage2(
   predictionAll = reduce(lambda df1,df2: pd.concat([df1, df2], axis=1), predictionList)
   predictionAll["mean"] = predictionAll.mean(axis = 1, numeric_only=True, skipna=True)
   predictionMean = predictionAll[["mean"]].rename(columns = {"mean": predictionAll.columns[0]})
+  predictionMean = indexOrder.join(predictionMean).sort_values(by=["rank"]).drop(columns=["rank"])
+
   return predictionMean
 
