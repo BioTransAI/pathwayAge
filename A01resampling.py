@@ -21,9 +21,13 @@ class resample(object):
   def CrossValidation(self):
     dataCVList = []
     foldSize = math.ceil(len(self.trainData.index)/self.nfold)
-    listFold = [list(self.trainData.index)[i:i + foldSize] for i in range(0, len(self.trainData.index), foldSize)]
+    trainData = self.trainData.sample(frac=1, random_state=self.randomState)
+    listFold = [list(trainData.index)[i:i + foldSize] for i in range(0, len(trainData.index), foldSize)]
+    if  len(listFold) + 1 == self.nfold:
+      foldSize = math.floor(len(self.trainData.index)/self.nfold)
+      listFold = [list(trainData.index)[i:i + foldSize] for i in range(0, foldSize*(self.nfold -1), foldSize)]
+      listFold.append(list(trainData.index)[foldSize*(self.nfold -1): len(trainData.index)])
     for fold in listFold:
-      trainData = self.trainData.sample(frac=1, random_state=self.randomState)
       testDataCV = trainData.loc[fold]
       trainDataCV = trainData[~trainData.index.isin(fold)]
       dataCVList.append([trainDataCV, testDataCV])
