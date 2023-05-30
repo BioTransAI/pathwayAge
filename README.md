@@ -12,6 +12,7 @@ git clone https://github.com/BioTransAI/pathwayAge.git
 make sure [Anaconda](https://docs.anaconda.com/free/anaconda/install/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) is already installed. Then move the file "pyBioTrans.yml" under the ~/miniconda3/bin/. 
 ```bash
 mv pyBioTrans.yml ~/miniconda3/bin/
+cd ~/miniconda3/bin/
 conda env create -f pyBioTrans.yml
 ```
 
