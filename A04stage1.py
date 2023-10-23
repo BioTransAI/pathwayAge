@@ -22,6 +22,30 @@ hyperParam: dict,
 cores: int,
 methylTestData: Optional[pd.DataFrame] = pd.DataFrame(), 
 ):
+
+    """stage1
+    
+        Generate the intermediate data for the next step called "stage2" parallelly. 
+
+    Parameter
+    ----------
+        omics2pathlist: a list of dataframe, each dataframe contains CpGs of one pathway;
+        age: a dataframe contains age of training datset;
+        nfold: Number of folds, default=5;
+        randomState: utilizing Customized hyperparameters if TURE;
+        predictionMode: methods to generate the model, 'Ridge', 'SVR' or 'GradientBoosting';
+        reconData: Reconstructing data if TRUE;
+        tuneHyperParam: utilizing Customized hyperparameters if TURE;
+        hyperParam: Customized hyperparameters;
+        i: The ith fold in K-Folds;
+        cores: set multiple CPU cores, default 5.
+        methylTestData: testing data, default empty dataframe.
+
+    Return
+    ----------
+        a dataframe. 
+    """ 
+
     cvList = []
     if reconData: 
         for i in range(nfold):

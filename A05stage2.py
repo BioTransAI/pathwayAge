@@ -1,11 +1,11 @@
 
 from A01resampling import resample
 from A02prediction import prediction4stage2
-from A03supp_age import antiAgeTransfer, ageTransfer
+from A03supp_age import antiAgeTransfer
 import pandas as pd
 from functools import reduce
 from xmlrpc.client import boolean
-from typing import List, Optional
+
 
 def stage2(
     cvList: list,
@@ -17,6 +17,28 @@ def stage2(
     tuneHyperParam: boolean,
     hyperParam: dict,
 ): 
+
+    """stage2
+    
+        Finial step for the biological age prediction.
+        utilizing the intermediate data from stage1 building predictor.
+
+    Parameter
+    ----------
+        cvList: a list of dataframe, each dataframe contains CpGs of one pathway;
+        age: a dataframe contains age of training datset;
+        resultName: the file name of biological age prediction;
+        nfold: Number of folds, default=5;
+        randomState: random_state affects the ordering of the indices, which controls the randomness of each fold.
+                     defult = 6677;
+        predictionMode: methods to generate the model, 'Ridge', 'SVR' or 'GradientBoosting';
+        tuneHyperParam: utilizing Customized hyperparameters if TURE;
+        hyperParam: Customized hyperparameters;
+
+    Return
+    ----------
+        a dataframe. 
+    """ 
     from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
     resultList = []
     for i in range(nfold):
@@ -35,17 +57,7 @@ def stage2(
     prediction = prediction.astype(float)
     prediction = prediction.join(age[["Age"]])
     prediction = prediction.applymap(lambda x: antiAgeTransfer(x))
-
     print(prediction)
-  
-    mean_squared_error = mean_squared_error(prediction["Age"].values, prediction["prediction"].values)
-    mean_absolute_error = mean_absolute_error(prediction["Age"].values, prediction["prediction"].values)
-    r2_score = r2_score(prediction["Age"].values, prediction["prediction"].values)
-    dataCorr = prediction.drop(columns=["Age"]).corrwith(prediction['Age'], method='pearson')
-    print("mean_squared_error: {}".format(mean_squared_error))
-    print("mean_absolute_error: {}".format(mean_absolute_error))
-    print("r2_score: {}".format(r2_score))
-    print("correlation: {}".format(dataCorr))
     prediction.to_csv("{}.csv".format(resultName))
 
 
@@ -90,18 +102,8 @@ def stage2pediction(
     prediction["mean"] = prediction.mean(axis = 1, numeric_only=True, skipna=True)
     prediction = prediction.astype(float)
     prediction = prediction.join(predict[0][["Age"]])
-    print("prediction", prediction)
     prediction = prediction[["mean", "Age"]].applymap(lambda x: antiAgeTransfer(x))
     prediction = prediction.rename(columns={"mean": "prediction"})
     print("prediction", prediction)
-
-    mean_squared_error = mean_squared_error(prediction["Age"].values, prediction["prediction"].values)
-    mean_absolute_error = mean_absolute_error(prediction["Age"].values, prediction["prediction"].values)
-    r2_score = r2_score(prediction["Age"].values, prediction["prediction"].values)
-    dataCorr = prediction[["prediction"]].corrwith(prediction['Age'], method='pearson')
-    print("mean_squared_error: {}".format(mean_squared_error))
-    print("mean_absolute_error: {}".format(mean_absolute_error))
-    print("r2_score: {}".format(r2_score))
-    print("correlation: {}".format(dataCorr))
     prediction.to_csv("{}.csv".format(resultName))
 

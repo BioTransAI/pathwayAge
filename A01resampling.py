@@ -10,6 +10,25 @@ class resample(object):
       randomState: int,
       sampleMode: Optional[str] = "CrossValidation",
   ):
+    """resample
+      
+      for "CrossValidation": K-Folds splitters.
+      Provides train/test indices to split data in train/test sets. 
+      Split dataset into k consecutive folds (with fixed shuffling by default).
+      Each fold is then used once as a validation while the k - 1 remaining folds form the training set.
+      This Function could be extended, for example, "bootstraping" by chaning the sampleMode. 
+      
+      Parameters
+    ----------
+      trainData: methylation matrix;
+      nfold: Number of folds, default=5; 
+      randomState: random_state affects the ordering of the indices, which controls the randomness of each fold.
+                   defult = 6677;
+      sampleMode: CrossValidation
+    Return
+    ----------
+      a list of dataframe. 
+    """ 
     self.sampleMode = sampleMode
     self.trainData = trainData
     self.nfold = nfold

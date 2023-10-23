@@ -42,7 +42,7 @@ def pathwayAge(
     minPathSize: Optional[int] = 5,
     nfold: Optional[int] = 5,
     randomState: Optional[int] = 6677,
-    predictionMode: Optional[str] = "GradientBoosting",
+    predictionMode: Optional[str] = "Ridge",
     reconData: Optional[boolean] = False,
     tuneHyperParam: Optional[boolean] = False,
     hyperParam: Optional[dict]= None,
@@ -54,6 +54,7 @@ def pathwayAge(
    In each stage a regression optimization is allowed.
    If methylTestData not provided, pathwayAge will predict suject age in methylTestData 
    by Cross Validation. 
+
    Parameters
    ----------
    methylData: methylation matrix with Age info;
@@ -62,19 +63,17 @@ def pathwayAge(
    restrictUp: the upper limit of number of genes in one pathway, default 200;
    restrictDown: the lower limit of number of genes in one pathway, default 10;
    minPathSize: CpG sites minimal number in each pathway, default 5;
-   nfold: N-fold of cross validation, default 5;
+   nfold: KFold, default 5;
    randomState: seed for random number generator, default 6677;
-   predictionMode: regression model, default GradientBoosting;
-   reconData: the way of generate the stage1 data(the age score of each BP pathway).
-        #TODO
-        default False
-   tuneHyperParam: whether tuning the hyperparamter of each regression stage or not.
-        default False;
-    
+   predictionMode: regression model, default Ridge;
+   reconData: Reconstructing data if TRUE, default False;
+   tuneHyperParam: utilizing Customized hyperparameters if TURE, default False;
    hyperParam: hyperparameter of regression model, default None;
-   cores: number of processors on the machine, default 5.
+   cores: set multiple CPU cores, default 5.
+   
    return
    ----------
+    a predicted biological age CSV file.
 
     """
     cpgAnno, golist= metaData()

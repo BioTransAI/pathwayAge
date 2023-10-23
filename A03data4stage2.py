@@ -19,12 +19,26 @@ def reconTrainTestData(
     nfold: int,
     randomState : int
 ):
-    """
-    reconstruct the training and testing data. 
-    keep the outter test data unseen. 
-    use the inner test data to train the model.
-    return: list of training and test datasets.
-    """
+
+
+    """reconTrainTestData
+    
+      Data reassembly processing. 
+      Reconstructing training/testing data into sepcfic form.
+      Details please see the tutorial documents.
+
+    Parameter
+    ----------
+      data: a list of training and testing datasets;
+      nfold: Number of folds, default=5;
+      randomState: random_state affects the ordering of the indices, which controls the randomness of each fold.
+                   defult = 6677;
+
+    Return
+    ----------
+      a list of dataframe. 
+    """ 
+
     dataReconList= []
     [trainData, testData] = data
     data = resample(
@@ -48,13 +62,29 @@ def dataForStage2(
     nfold,
     randomState,
 ):
-  """
-  generate the data for stage2. 
-  data: a dataframe contains CpG in one pathway; 
-  predictionMode: can be swithed for different tasks, here we ues "GradientBoosting";
-  i: ith fold of cross validation;
-  return: a dataframe -> prediction mean based on nfold inner training data models.
-  """
+
+
+  """dataForStage2
+  
+    Generate the intermediate data for the next step called "stage2". 
+
+  Parameter
+  ----------
+    data: a dataframe contains CpG in one pathways;
+    predictionMode: methods to generate the model, 'Ridge', 'SVR' or 'GradientBoosting';
+    tuneHyperParam: utilizing Customized hyperparameters if TURE;
+    hyperParam: Customized hyperparameters;
+    i: The ith fold in K-Folds;
+    reconData: Reconstructing data if TRUE;
+    nfold: Number of folds, default=5;
+    randomState: random_state affects the ordering of the indices, which controls the randomness of each fold,
+                 defult = 6677;
+
+  Return
+  ----------
+    a dataframe. 
+  """ 
+
   indexOrder = pd.DataFrame(
     index=data.index, 
     columns=["rank"], 
