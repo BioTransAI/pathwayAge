@@ -45,9 +45,9 @@ Example Usage:
       methylData = methylTrainData,
       # import testing data
       methylTestData = methylTestData,
-      # name the file of precition results
+      # name the file for the prediction results
       resultName = resultName,
-      # choose one Meachine learning methods
+      # Select one machine learning method
       predictionMode = predictionMode,
     )
   ```
@@ -63,9 +63,9 @@ Example Usage:
     pathwayAge(
       # import Training data
       methylData = methylTrainData,
-      # name the file of precition results
+      # name the file for the prediction results
       resultName = resultName,
-      # choose one Meachine learning methods
+      # select one machine learning method
       predictionMode = predictionMode,
     )
   ```
@@ -76,10 +76,10 @@ Example Usage:
 
   ```bash 
    
-   # run python script to get feature ranking
+   # Execute the Python script to obtain feature ranking
    python3 XcofounderAdjustedPathwayFeatureImportanceRanking.py
 
-   # run R script to visualize the ranking
+   # Run the R script to visualize the ranking
    R XcofounderAdjustedPathwayFeatureImportanceRankingPlot.R
 
   ```
@@ -92,10 +92,10 @@ Example Usage:
 
   ```bash 
     
-    # run R script to find the modules
+    # Execute the R script to discover the modules.
     R YAgeAssociatedModuleIdentification.R
 
-    # run python sript to analysis the modules and plot the results
+    # Run the Python script to analyze the modules and generate visual results.
     python3 YAgeAssociatedModuleNetworkAnalysis.py
 
   ```
