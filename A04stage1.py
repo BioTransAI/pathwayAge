@@ -13,6 +13,7 @@ from A03data4stage2 import dataForStage2, reconTrainTestData
 def stage1(
 omics2pathlist,
 age, 
+resultName, 
 nfold: int,
 randomState: int,
 predictionMode: str,
@@ -68,7 +69,7 @@ methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
             cvList.append(data4Stage2)
         print("data4Stage2 datasets keeping the outer data unseen complete!")
 
-    if  methylTestData.empty:
+    else:
         with concurrent.futures.ProcessPoolExecutor(max_workers=cores) as executor:
             predictionMeanList = list(executor.map(dataForStage2,
                                             omics2pathlist,
@@ -84,9 +85,7 @@ methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
         data4Stage2 = reduce(lambda df1,df2: pd.concat([df1, df2], axis=1), predictionMeanList)
         data4Stage2 = data4Stage2.join(age[["Age"]])
         print(data4Stage2)
-        # data4Stage2.to_csv(path.format("data4Stage2.csv"))
+        data4Stage2.to_csv("{}data4Stage2.csv".format(resultName))
         print("data4Stage2 datasets all data been seen complete!")
-    else: 
-        data4Stage2 = pd.DataFrame()
     
     return data4Stage2, cvList
