@@ -102,7 +102,11 @@ Example Usage:
   ```
 
 
-Citation
+Tutorial
 ------------------- 
+- [Data input, cleaning and pre-processing](tutorials/Data_format.md): How to format, clean and preprocess your input data for PathwayAge
+- [Quick Start](tutorials/Quick_Start.ipynb): What data and parameters need to be load into PathwayAge and predict biological Age
+- [cofounder Adjusted Pathway Feature Importance Ranking](tutorials/XcofounderAdjustedPathwayFeatureImportanceRanking.ipynb): How to ranking the adjusted Age-related biological pathways
+- [Age Associated Module Identification](tutorials/YAgeAssociatedModuleIdentification.md): How to iidentify the Age-Associated Modules using WGCNA with prior knowledge of pathways
+- [Age Associated Module Network Analysis](tutorials/AgeAssociatedModuleIdentification.ipynb): How to analyze the relationship between the modules, between the modules and aging, then visualize the connections using a user-friendly D3 graph
 
- 
