@@ -34,20 +34,23 @@ Example Usage:
 
 1. PathwayAge Biological age presdiction   
 
-    - Provide both the training dataset and the testing dataset:
+  - Provide both the training dataset and the testing dataset:
 
   ```python
 
     from pathwayAge import pathwayAge
     
     pathwayAge(
+      # import Training data
       methylData = methylTrainData,
+      # import testing data
       methylTestData = methylTestData,
+      # name the file of precition results
       resultName = resultName,
+      # choose one Meachine learning methods
       predictionMode = predictionMode,
     )
   ```
-  - Provide both the training dataset and the testing dataset:
 
   - Using only the training dataset, the model will automatically perform cross-validation-style predictions in each outer cross-validation loop to prevent  data leakage into the testing data labels (Age).
 
@@ -58,8 +61,11 @@ Example Usage:
     from pathwayAge import pathwayAge
     
     pathwayAge(
+      # import Training data
       methylData = methylTrainData,
+      # name the file of precition results
       resultName = resultName,
+      # choose one Meachine learning methods
       predictionMode = predictionMode,
     )
   ```
@@ -69,9 +75,11 @@ Example Usage:
     The python script will ranking the adjusted Age-related biological pathways and display the results in by R srcip.
 
   ```bash 
-  
+   
+   # run python script to get feature ranking
    python3 XcofounderAdjustedPathwayFeatureImportanceRanking.py
 
+   # run R script to visualize the ranking
    R XcofounderAdjustedPathwayFeatureImportanceRankingPlot.R
 
   ```
@@ -83,10 +91,12 @@ Example Usage:
 
 
   ```bash 
+    
+    # run R script to find the modules
+    R YAgeAssociatedModuleIdentification.R
 
-   R YAgeAssociatedModuleIdentification.R
-
-   python3 YAgeAssociatedModuleNetworkAnalysis.py
+    # run python sript to analysis the modules and plot the results
+    python3 YAgeAssociatedModuleNetworkAnalysis.py
 
   ```
 
