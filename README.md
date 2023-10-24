@@ -104,7 +104,7 @@ Example Usage:
 
 Tutorial
 ------------------- 
-- [DData input and output](tutorials/Data_format.md): How to preprocess your input data for PathwayAge and what output data you will get.
+- [Data input and output](tutorials/Data_format.md): How to preprocess your input data for PathwayAge and what output data you will get.
 - [Quick Start](tutorials/Quick_Start.ipynb): What data and parameters need to be load into PathwayAge and predict biological Age.
 - [cofounder Adjusted Pathway Feature Importance Ranking](tutorials/XcofounderAdjustedPathwayFeatureImportanceRanking.ipynb): How to ranking the adjusted Age-related biological pathways.
 - [Age Associated Module Identification](tutorials/YAgeAssociatedModuleIdentification.md): How to iidentify the Age-Associated Modules using WGCNA with prior knowledge of pathways.

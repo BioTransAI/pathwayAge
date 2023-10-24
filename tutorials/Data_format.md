@@ -3,15 +3,15 @@
 Recognizing data is the first and essential step for the PathwayAge model, 
 as well as for any other models. Here are some criteria for pre-processing 
 the methylation data and show you the structure of the input, internal and 
-output datasets.
+output datasets. Both input and output datasets are saved as CSV files.
 
 * [Data Input](#input_data)
   * [MethylData format](#MethylData_format)
-        * [Handling Missing Values in Methylation Sites](#MissValue)
-        * [Methylation Site Alignment](#Alignment)
-  * [cofunders fornmat](#separate_mat)
+    * [Handling Missing Values in Methylation Sites](#MissValue)
+    * [Methylation Site Alignment](#Alignment)
+  * [cofunders fornmat](#cofunder)
 
-* [Data output](#data_preproc)
+* [Data output](#dataOutput)
   * [Predicton format](#MethylData_format)
   * [cofunders fornmat](#separate_mat)
 
@@ -21,7 +21,7 @@ To run the 'pathwayAge' function, methylation data should be
 provided as the input data. For later analysis, the cofunders 
 (covariance data) should be used as input data.
 
-### <a name="MethylData_format"></a>MethylData forma
+### <a name="MethylData_format"></a>MethylData format
 
 For the input methylation matrix, each row contains information 
 about a methylation site, and each column contains the information 
@@ -48,6 +48,7 @@ all datasets.
       <th>GSM2333902</th>
       <th>GSM2333903</th>
       <th>GSM2333904</th>
+      <th>...</th>
     </tr>
   </thead>
   <tbody>
@@ -57,6 +58,7 @@ all datasets.
       <th>55.000</th>
       <th>23.000</th>
       <th>86.000</th>
+      <th>...</th>
     </tr>
     <tr>
       <td>cg05352250</td>
@@ -64,6 +66,7 @@ all datasets.
       <th>0.951</th>
       <th>0.967</th>
       <th>0.967</th>
+      <th>...</th>
     </tr>
     <tr>
       <td>cg16882684</td>
@@ -71,54 +74,83 @@ all datasets.
       <th>0.598</th>
       <th>0.680</th>
       <th>0.653</th>
+      <th>...</th>
+    </tr>
+    <tr>
+      <td>...</td>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
     </tr>
   </tbody>
 </table>
 </div>
 
 
-<!-- #### <a name="gene_meta"></a>Gene metadata
+### <a name="cofunder"></a>cofunders fornmat
 
-The gene metadata is a table which contains additional information about each gene, such as gene biotype or gene length.
-Each row should represent a gene and each column should represent a gene feature, where the first columns contains the same gene identifier that was used in the gene expression matrix
-The rows should be in the same order as the columns of the gene expression matrix, or
-the user can specify `order=False`.
+Covariate data is a user-designed matrix that includes confounding variables 
+related to a specific disease or variables of interest. The following tabel
+displays the components I used in this project which 
 
 <div>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>gene_id</th>
-      <th>gene_name</th>
-      <th>gene_type</th>
+      <th>CpG</th>
+      <th>GSM2333901</th>
+      <th>GSM2333902</th>
+      <th>GSM2333903</th>
+      <th>GSM2333904</th>
+      <th>...</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>ENSMUSG00000000003</td>
-      <th>Pbsn</th>
-      <th>protein_coding</th>
+      <td>Age</td>
+      <th>72.000</th>
+      <th>55.000</th>
+      <th>23.000</th>
+      <th>86.000</th>
+      <th>...</th>
     </tr>
     <tr>
-      <td>ENSMUSG00000000028</td>
-      <th>Cdc45</th>
-      <th>protein_coding</th>
+      <td>cg05352250</td>
+      <th>0.961</th>
+      <th>0.951</th>
+      <th>0.967</th>
+      <th>0.967</th>
+      <th>...</th>
     </tr>
     <tr>
-      <td>ENSMUSG00000000031</td>
-      <th>H19</th>
-      <th>lncRNA</th>
+      <td>cg16882684</td>
+      <th>0.722</th>
+      <th>0.598</th>
+      <th>0.680</th>
+      <th>0.653</th>
+      <th>...</th>
     </tr>
     <tr>
-      <td>ENSMUSG00000000037</td>
-      <th>Scml2</th>
-      <th>protein_coding</th>
+      <td>...</td>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
     </tr>
   </tbody>
 </table>
 </div>
 
-#### <a name="sample_meta"></a>Sample metadata
+## <a name="dataOutput"></a>Output data format
+
+After processing the biological age predictor, two files are generated: 
+one containing the final age prediction results and the other containing 
+internal datasets called "data4Stage2".
+
+### <a name="sample_meta"></a>Sample metadata
 
 The sample metadata is a table which contains additional information about each sample, such as timepoint or genotype.
 Each row should represent a sample and each column should represent a metadata feature, where the first columns contains the same sample identifier that was used in the gene expression matrix
@@ -181,4 +213,4 @@ PyWGCNA can clean the input data according to the following criteria:
 1. Remove genes without any expression more than `TPMcutoff` value (default one) across all samples.
 2. Find genes and samples `goodSamplesGenes()` function to find genes and samples with too many missing values.
 3. Cluster the samples (uses [hierarchical clustering](https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html#module-scipy.cluster.hierarchy)
-from [scipy](https://scipy.org/)) to see if there are any obvious outliers. The user can define value the height by specifying the `cut` value. By default, no samples are removed by hierarchical clustering -->
+from [scipy](https://scipy.org/)) to see if there are any obvious outliers. The user can define value the height by specifying the `cut` value. By default, no samples are removed by hierarchical clustering
