@@ -94,6 +94,7 @@ def pathwayAge(
         _, cvList = stage1(
             methyl2PathList,
             age,
+            resultName = resultName, 
             nfold=nfold,
             randomState = randomState,
             predictionMode=predictionMode,
@@ -117,6 +118,7 @@ def pathwayAge(
         data4Stage2, _ = stage1(
                 methyl2PathList,
                 age,
+                resultName = resultName, 
                 nfold=nfold,
                 randomState = randomState,
                 predictionMode = predictionMode,
@@ -140,6 +142,7 @@ def pathwayAge(
         _, cvList = stage1(
             methyl2PathTestList,
             age = testAge,
+            resultName = resultName, 
             nfold=nfold,
             randomState = randomState,
             predictionMode = predictionMode,
