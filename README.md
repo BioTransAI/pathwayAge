@@ -17,14 +17,15 @@ git clone git@github.com:BioTransAI/pathwayAge.git
 
 ```
 2. environments:
-    - Make sure the  [Anaconda](https://www.anaconda.com/products/individual)  or [Miniconda](https://docs.conda.io/projects/miniconda/en/latest/) is already installed.  <br>
-    - Move the file "pyBioTrans.yaml" under the path ~/miniconda3/bin/. <br>
+  - Make sure the  [Anaconda](https://www.anaconda.com/products/individual)  or [Miniconda](https://docs.conda.io/projects/miniconda/en/latest/) is already installed.  <br>
+  - Move the file "pyBioTrans.yaml" under the path ~/miniconda3/bin/. <br>
 
   ```bash
   
     mv pyBioTrans.yml ~/miniconda3/bin/
     cd ~/miniconda3/bin/
     conda env create -f pyBioTrans.yml
+    conda activate pyBioTrans
 
   ```
 
