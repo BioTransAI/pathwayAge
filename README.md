@@ -47,8 +47,9 @@ Example Usage:
       predictionMode = predictionMode,
     )
   ```
+  - Provide both the training dataset and the testing dataset:
 
-    - Using only the training dataset, the model will automatically perform cross-validation-style predictions in each outer cross-validation loop to prevent  data leakage into the testing data labels (Age).
+  - Using only the training dataset, the model will automatically perform cross-validation-style predictions in each outer cross-validation loop to prevent  data leakage into the testing data labels (Age).
 
   ![](Image/crossValidation.png)
 
