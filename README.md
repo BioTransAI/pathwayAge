@@ -46,7 +46,6 @@ Example Usage:
       resultName = resultName,
       predictionMode = predictionMode,
     )
-
   ```
 
     - Using only the training dataset, the model will automatically perform cross-validation-style predictions in each outer cross-validation loop to prevent  data leakage into the testing data labels (Age).
@@ -62,7 +61,6 @@ Example Usage:
       resultName = resultName,
       predictionMode = predictionMode,
     )
-
   ```
 
 2. The co-founder adjusted the pathway feature importance ranking
