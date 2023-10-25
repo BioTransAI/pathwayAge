@@ -55,7 +55,7 @@ Example Usage:
 
   - Using only the training dataset, the model will automatically perform cross-validation-style predictions in each outer cross-validation loop to prevent  data leakage into the testing data labels (Age).
 
-  ![](Image/crossValidation.png)
+  <!-- ![](Image/crossValidation.png) -->
 
   ```python
 
@@ -106,8 +106,8 @@ Tutorial
 ------------------- 
 - [Data input and output](tutorials/DataFormat.md): How to preprocess your input data for PathwayAge and what output data you will get.
 - [Quick Start](tutorials/QuickStart.ipynb): What data and parameters need to be load into PathwayAge and predict biological Age.
-- [cofounder Adjusted Pathway Feature Importance Ranking](tutorials/XcofounderAdjustedPathwayFeatureImportanceRanking.ipynb): How to ranking the adjusted Age-related biological pathways.
-- [Age Associated Module Identification](tutorials/YAgeAssociatedModuleIdentification.md): How to iidentify the Age-Associated Modules using WGCNA with prior knowledge of pathways.
+- [cofounder Adjusted Pathway Feature Importance Ranking](tutorials/FeatureRanking.ipynb): How to ranking the adjusted Age-related biological pathways.
+- [Age Associated Module Identification](tutorials/ModuleIdentification.R): How to iidentify the Age-Associated Modules using WGCNA with prior knowledge of pathways.
 - [Age Associated Module Network Analysis](tutorials/AgeAssociatedModuleIdentification.ipynb): How to analyze the relationship between the modules, between the modules and aging, then visualize the connections using a user-friendly D3 graph.
 
 
