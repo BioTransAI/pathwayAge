@@ -151,7 +151,7 @@ one containing the final age prediction results and the other containing
 internal datasets called "data4Stage2".
 
 ### <a name="sample_meta"></a>Sample metadata
-
+<!-- 
 The sample metadata is a table which contains additional information about each sample, such as timepoint or genotype.
 Each row should represent a sample and each column should represent a metadata feature, where the first columns contains the same sample identifier that was used in the gene expression matrix
 The rows should be in the same order as the rows of the gene expression matrix, or
@@ -213,4 +213,4 @@ PyWGCNA can clean the input data according to the following criteria:
 1. Remove genes without any expression more than `TPMcutoff` value (default one) across all samples.
 2. Find genes and samples `goodSamplesGenes()` function to find genes and samples with too many missing values.
 3. Cluster the samples (uses [hierarchical clustering](https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html#module-scipy.cluster.hierarchy)
-from [scipy](https://scipy.org/)) to see if there are any obvious outliers. The user can define value the height by specifying the `cut` value. By default, no samples are removed by hierarchical clustering
+from [scipy](https://scipy.org/)) to see if there are any obvious outliers. The user can define value the height by specifying the `cut` value. By default, no samples are removed by hierarchical clustering -->
