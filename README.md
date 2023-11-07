@@ -3,7 +3,7 @@ PathwayAge
 
 PathwayAge is a two-stage AI module designed for predicting biological age and analyzing age-related pathways.
 
- ![](Image/pathwayAgeProcess.png)
+ <!-- ![](Image/pathwayAgeProcess.png) -->
 
 Installation
 ------------------- 
