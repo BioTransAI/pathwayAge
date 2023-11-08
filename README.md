@@ -109,7 +109,7 @@ Tutorial
 - [cofounder Adjusted Pathway Feature Importance Ranking](tutorials/FeatureRanking.ipynb): How to ranking the adjusted Age-related biological pathways.
 - [Age Associated Module Identification](tutorials/ModuleIdentification.R): How to iidentify the Age-Associated Modules using WGCNA with prior knowledge of pathways.
 - [Age Associated Module Network Analysis](tutorials/AgeAssociatedModuleIdentification.ipynb): How to analyze the relationship between the modules, between the modules and aging, then visualize the connections using a user-friendly D3 graph.
-
+- [test](tutorials/tianChi.ipynb)
 
 Citation
 ------------------- 
