@@ -9,7 +9,7 @@ output datasets. Both input and output datasets are saved as CSV files.
   * [MethylData format](#MethylData_format)
     * [Handling Missing Values in Methylation Sites](#MissValue)
     * [Methylation Site Alignment](#Alignment)
-  * [cofunders fornmat](#cofunder)
+  * [confunders fornmat](#confunder)
 
 * [Data output](#dataOutput)
   * [Predicton format](#MethylData_format)
@@ -89,7 +89,7 @@ all datasets.
 </div>
 
 
-### <a name="cofunder"></a>cofunders fornmat
+### <a name="confunder"></a>confunders fornmat
 
 Covariate data is a user-designed matrix that includes confounding variables 
 related to a specific disease or variables of interest. The following tabel
@@ -99,42 +99,37 @@ displays the components I used in this project which
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>CpG</th>
-      <th>GSM2333901</th>
-      <th>GSM2333902</th>
-      <th>GSM2333903</th>
-      <th>GSM2333904</th>
+      <th>ID</th>
+      <th>Age</th>
+      <th>Label</th>
+      <th>Female</th>
       <th>...</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Age</td>
-      <th>72.000</th>
-      <th>55.000</th>
-      <th>23.000</th>
-      <th>86.000</th>
+      <td>GSM2333901</td>
+      <th>43</th>
+      <th>0</th>
+      <th>0</th>
       <th>...</th>
     </tr>
     <tr>
-      <td>cg05352250</td>
-      <th>0.961</th>
-      <th>0.951</th>
-      <th>0.967</th>
-      <th>0.967</th>
+      <td>GSM2333902</td>
+      <th>55</th>
+      <th>0</th>
+      <th>1</th>
       <th>...</th>
     </tr>
     <tr>
-      <td>cg16882684</td>
-      <th>0.722</th>
-      <th>0.598</th>
-      <th>0.680</th>
-      <th>0.653</th>
+      <td>GSM2333903</td>
+      <th>26</th>
+      <th>0</th>
+      <th>0</th>
       <th>...</th>
     </tr>
     <tr>
       <td>...</td>
-      <th>...</th>
       <th>...</th>
       <th>...</th>
       <th>...</th>
