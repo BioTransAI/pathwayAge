@@ -55,7 +55,7 @@ if (file.info(directory_name)$isdir) {
 } else {
   cat("Failed to create the directory:", directory_name, "\n")
 }
-path_out <- "./discovery3KGOClusterSub/"
+path_out <- "./analysis/discovery3KGOClusterSub/"
 randIndexResults <- data.frame(CutHeight = numeric(), MinClusterSize = integer(), RandIndex = numeric()) 
 for(cutHeight in cutHeightList) {                                            # Head of first for-loop
   for(minClusterSize in minClusterSizeList) {                                          # Head of nested for-loop

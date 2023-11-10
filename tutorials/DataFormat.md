@@ -12,14 +12,13 @@ output datasets. Both input and output datasets are saved as CSV files.
   * [confunders fornmat](#confunder)
 
 * [Data output](#dataOutput)
-  * [Predicton format](#MethylData_format)
-  * [cofunders fornmat](#separate_mat)
-
+  * [Prediction format](#Prediction)
+  * [data4stage2 format](#data4stage2)
 ## <a name="input_data"></a>Input data format
 
 To run the 'pathwayAge' function, methylation data should be 
-provided as the input data. For later analysis, the cofunders 
-(covariance data) should be used as input data.
+provided as the input data. For later analysis, the confunders
+info(covariance data) is also required.
 
 ### <a name="MethylData_format"></a>MethylData format
 
@@ -92,14 +91,13 @@ all datasets.
 ### <a name="confunder"></a>confunders fornmat
 
 Covariate data is a user-designed matrix that includes confounding variables 
-related to a specific disease or variables of interest. The following tabel
-displays the components I used in this project which 
+related to a specific disease or variables of interest. 
 
 <div>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>ID</th>
+      <th>Sample</th>
       <th>Age</th>
       <th>Label</th>
       <th>Female</th>
@@ -143,69 +141,88 @@ displays the components I used in this project which
 
 After processing the biological age predictor, two files are generated: 
 one containing the final age prediction results and the other containing 
-internal datasets called "data4Stage2".
+internal datasets called "data4Stage2". 
 
-### <a name="sample_meta"></a>Sample metadata
-<!-- 
-The sample metadata is a table which contains additional information about each sample, such as timepoint or genotype.
-Each row should represent a sample and each column should represent a metadata feature, where the first columns contains the same sample identifier that was used in the gene expression matrix
-The rows should be in the same order as the rows of the gene expression matrix, or
-the user can specify `order=False`.
+### <a name="Prediction"></a>Prediction format
+Prediction contains the biologically predicted age computed by 'pathwayAge'
 
 <div>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>Sample_id</th>
+      <th>Sample</th>
+      <th>Prediction</th>
       <th>Age</th>
-      <th>Tissue</th>
-      <th>Sex</th>
-      <th>Genotype</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>sample_11615</td>
-      <td>4mon</td>
-      <td>Cortex</td>
-      <td>Female</td>
-      <td>5xFADHEMI</td>
+      <td>GSM2333901</td>
+      <th>56.469699</th>	
+      <th>55.0</th>
     </tr>
     <tr>
-      <td>sample_11616</td>
-      <td>4mon</td>
-      <td>Cortex</td>
-      <td>Female</td>
-      <td>5xFADWT</td>
+      <td>GSM2333903</td>
+      <th>56.469699</th>
+      <th>55.0</th>
+    </tr>
+    <tr>
+      <td>GSM2333903</td>
+      <th>22.008102</th>		
+      <th>23.0</th>	
+    </tr>
+    <tr>
+      <td>...</td>
+      <th>...</th>
+      <th>...</th>
     </tr>
   </tbody>
 </table>
 </div>
 
-### <a name="params"></a>Other parameters
-These are other parameters that can be specified.
+### <a name="data4Stage2"></a>data4Stage2 fornmat
+'data4Stage2' is the outcome of condensing CpGs into pathways
 
-* **name**: Name of the WGCNA used to visualize data (default: `WGCNA`)
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th> </th>
+      <th>GO:0000002</th>
+      <th>GO:0000012</th>
+      <th>GO:0000027</th>
+      <th>...</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>7786915049_R03C02</td>
+      <th>1.306</th>	
+      <th>1.166</th>
+      <th>1.069</th>
+      <th>...</th>
+    </tr>
+    <tr>
+      <td>7471147041_R05C01</td>
+      <th>1.011</th>
+      <th>1.767</th>
+      <th>1.233</th>
+      <th>...</th>
+    </tr>
+    <tr>
+      <td>7507867089_R02C02</td>				
+      <th>1.575</th>		
+      <th>1.172</th>
+      <th>1.511</th>
+      <th>...</th>
+    </tr>
+    <tr>
+      <td>...</td>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-* **save**: Whether to save the results of important steps or not (If you want to set it
-`True` you should have a write access on the output directory)
-
-* **outputPath**: Where to save your data, otherwise it will be stored in the same directory as the code.
-
-* **TPMcutoff**: TPM cutoff for removing genes
-
-* **networkType** : Type of network to generate ({`unsigned`, `signed` and `signed hybrid`}, default: `signed hybrid`)
-
-* **adjacencyType**: Type of adjacency matrix to use ({`unsigned`, `signed` and `signed hybrid`}, default: `signed hybrid`)
-
-* **TOMType**: Type of topological overlap matrix(TOM) to use ({`unsigned`, `signed`}, default: `signed`)
-
-For depth-in documentation on these parameters see [here](https://mortazavilab.github.io/PyWGCNA/html/PyWGCNA.html).
-
-## <a name="data_preproc"></a>Data cleaning and preprocessing
-
-PyWGCNA can clean the input data according to the following criteria:
-1. Remove genes without any expression more than `TPMcutoff` value (default one) across all samples.
-2. Find genes and samples `goodSamplesGenes()` function to find genes and samples with too many missing values.
-3. Cluster the samples (uses [hierarchical clustering](https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html#module-scipy.cluster.hierarchy)
-from [scipy](https://scipy.org/)) to see if there are any obvious outliers. The user can define value the height by specifying the `cut` value. By default, no samples are removed by hierarchical clustering -->
