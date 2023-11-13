@@ -1,7 +1,7 @@
 PathwayAge
 ==============
 
-PathwayAge is a two-stage AI module designed for predicting biological age and analyzing age-related pathways.
+PathwayAge is a two-stage AI model specially designed to predict biological age and analyze age-related pathways, offering both predictive accuracy and explainability.
 
  <!-- ![](Image/pathwayAgeProcess.png) -->
 
@@ -33,9 +33,9 @@ git clone git@github.com:BioTransAI/pathwayAge.git
 Example Usage:
 ------------------- 
 
-1. PathwayAge Biological age presdiction   
+1. To predict biological age, please call the "PathwayAge" function.
 
-  - Provide both the training dataset and the testing dataset:
+  - Supplying both the training dataset and the testing dataset:
 
   ```python
 
@@ -53,7 +53,7 @@ Example Usage:
     )
   ```
 
-  - Using only the training dataset, the model will automatically perform cross-validation-style predictions in each outer cross-validation loop to prevent  data leakage into the testing data labels (Age).
+  - Using only the training dataset, the model will automatically perform nested cross validation to prevent data leakage into the testing data labels (Age) in stage1.
 
   <!-- ![](Image/crossValidation.png) -->
 
@@ -71,21 +71,21 @@ Example Usage:
     )
   ```
 
-2. The co-founder adjusted the pathway feature importance ranking
+2. The confounder-adjusted pathway feature importance ranking.
 
-    The python script will ranking the adjusted Age-related biological pathways and display the results in by R srcip.
+    The Python script will rank the adjusted age-related biological pathways and present the results using an R script.
 
-  ```bash 
-   
-   # Execute the Python script to obtain feature ranking
-   python3 XcofounderAdjustedPathwayFeatureImportanceRanking.py
+    ```bash 
+    
+    # Execute the Python script to obtain feature ranking
+    python3 XcofounderAdjustedPathwayFeatureImportanceRanking.py
 
-   # Run the R script to visualize the ranking
-   R XcofounderAdjustedPathwayFeatureImportanceRankingPlot.R
+    # Run the R script to visualize the ranking
+    R XcofounderAdjustedPathwayFeatureImportanceRankingPlot.R
 
-  ```
+    ```
 
-3. Identification of Age-Associated Modules and Network Analysis
+3. Age-Associated Modules Identification and Network Analysis
 
     First, identify the Age-Associated Modules using WGCNA with prior knowledge of pathways.
     Second, analyze the relationship between the modules, between the modules and aging, then visualize the connections using a user-friendly D3 graph.
@@ -104,9 +104,9 @@ Example Usage:
 
 Tutorial
 ------------------- 
-- [Data input and output](tutorials/DataFormat.md): How to preprocess your input data for PathwayAge and what output data you will get.
+- [Data input and output](tutorials/DataFormat.md): How to preprocess your input data for PathwayAge model and what output data format you will get.
 - [Quick Start](tutorials/QuickStart.ipynb): What data and parameters need to be load into PathwayAge and predict biological Age.
-- [cofounder Adjusted Pathway Feature Importance Ranking](tutorials/FeatureRanking.ipynb): How to ranking the adjusted Age-related biological pathways.
+- [confounder Adjusted Pathway Feature Importance Ranking](tutorials/FeatureRanking.ipynb): How to ranking the adjusted Age-related biological pathways.
 - [Age Associated Module Identification](tutorials/ModuleIdentification.R): How to iidentify the Age-Associated Modules using WGCNA with prior knowledge of pathways.
 - [Age Associated Module Network Analysis](tutorials/NetworkAnalysis.ipynb): How to analyze the relationship between the modules, between the modules and aging, then visualize the connections using a user-friendly D3 graph.
 
