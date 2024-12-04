@@ -1,21 +1,20 @@
 PathwayAge
 ==============
 
-PathwayAge is a two-stage AI model specially designed to predict biological age and analyze age-related pathways, offering both predictive accuracy and explainability.
+We present PathwayAge, a biologically-informed, machine learning-based epigenetic clock that integrates pathway-level biological data to predict biological age and assess disease-related risks. 
 
  <!-- ![](Image/pathwayAgeProcess.png) -->
 
 Repository Structure
 ------------------- 
 - `1-PathwayAge Model/`: This directory contains the code for constructing the PathwayAge model and predicting biological age.
-- `2-Aging Associated Pathways and Modules/`: This directory explains how to identify age-associated  modules using WGCNA or GO terms.
-- `3-Disease Risk/`: This directory evaluates the differences in AgeAcc between patients and healthy individuals.
-- `4-Disease Specific pathways/`: This directory analyzes differential pathways across different disease states, including sex-stratified differences within each disease. It also includes a permutation test for the top pathways.
-- `5-Reproduction in Transcriptomics/`: This directory contains an analysis using transcriptomics to validate the reproducibility of the top methylation pathways.
+- `2-Aging Associated Pathways and Modules/`: This directory explains how to identify age-associated GO/KEGG pathways and modules using WGCNA.
+- `3-Disease Risk Association /`: This directory evaluates that PathwayAge outperforms traditional clocks in predicting biological age acceleration and reveals distinct disease-specific aging patterns across aging-related diseases.
+- `4-Disease-Specific pathways/`: This directory analyzes differential pathways across different disease, including sex-stratified differences within each disease. 
+- `5-reproducibility in Transcriptomics/`: This directory contains an analysis using transcriptomics to validate the reproducibility of the top methylation pathways.
 
 Installation
 ------------------- 
-
 
 1. clone the repo:
  
