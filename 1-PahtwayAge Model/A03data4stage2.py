@@ -80,7 +80,7 @@ def dataForStage2(
     randomState: random_state affects the ordering of the indices, which controls the randomness of each fold,
                  defult = 6677;
 
-  Return
+  Returnƒ
   ----------
     a dataframe. 
   """ 

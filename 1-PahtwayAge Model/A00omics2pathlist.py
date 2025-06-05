@@ -41,15 +41,6 @@ def omics2pathlist(
   # print("methyl2PathList data is ready! {} pathways in total".format(len(methylPerPathList)))
   return methylPerPathList
 
-def pathSummary(
-    data: list
-):
-  print("Remove nbumber of too small siza path, the retained pathway {}"
-        .format(len(data))
-       )
-  ### -2 because ["GOName", "Age"]
-  summary = pd.DataFrame([len(item.columns)-2 for item in data])
-  return summary[0].describe().apply("{0:.1f}".format)
 
 
 

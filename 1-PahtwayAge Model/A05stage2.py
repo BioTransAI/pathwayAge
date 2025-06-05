@@ -5,6 +5,14 @@ from A03supp_age import antiAgeTransfer
 import pandas as pd
 from functools import reduce
 from xmlrpc.client import boolean
+import yaml
+from typing import List, Optional
+
+
+with open('./config.yml', 'r') as file:
+        root = yaml.safe_load(file)
+
+resultPath = root["pathway"]["result"]
 
 
 def stage2(
@@ -41,69 +49,57 @@ def stage2(
     """ 
     from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
     resultList = []
+    TrainDataList = []
     for i in range(nfold):
         dataForStage2 = cvList[i]
         data = resample(
             trainData = dataForStage2,
             nfold = nfold,
             randomState =randomState).resample()
+        [_, testData] = data[i]
+        TrainDataList.append(testData)
         result = prediction4stage2(
             data[i], 
             predictionMode, 
             tuneHyperParam,
             hyperParam).predictionMode()
         resultList.append(result)
+    TrainData = reduce(lambda df1,df2: pd.concat([df1, df2], axis=0), TrainDataList)
     prediction = reduce(lambda df1,df2: pd.concat([df1, df2], axis=0), resultList)
     prediction = prediction.astype(float)
     prediction = prediction.join(age[["Age"]])
     prediction = prediction.applymap(lambda x: antiAgeTransfer(x))
     print(prediction)
-    prediction.to_csv("{}.csv".format(resultName))
+    # prediction.to_csv("{}.csv".format(resultName))
+    TrainData.to_csv(resultPath.format(resultName) + "TrainingCV_Data4Stage2.csv")
+    prediction.to_csv(resultPath.format(resultName) + "TrainingCV_Prediction.csv")
+
 
 
 def stage2pediction(
-    predict: list,
+    predict: pd.DataFrame,
     model: pd.DataFrame, 
     resultName: str,
-    nfold: int,
-    randomState: int,
+    # nfold: int,
+    # randomState: int,
     predictionMode: str,
     tuneHyperParam: boolean,
     hyperParam: dict,
 ):
-    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-    resultList = []
-    testDataList = []
-    for i in range(nfold):
-        predictionDataForStage2 = predict[i]
-        predictionData = resample(
-            trainData = predictionDataForStage2,
-            nfold = nfold,
-            randomState= randomState).resample()
-        [_, testData] = predictionData[i]
-        testDataList.append(testData)
-    predictTestData = reduce(lambda df1,df2: pd.concat([df1, df2], axis=0), testDataList)
-    for i in range(nfold):
-        dataForStage2 = model
-        data = resample(
-            trainData = dataForStage2,
-            nfold = nfold,
-            randomState = randomState).resample()
-        [innertrainData, _] = data[i]
-        data = [innertrainData, predictTestData]
-        result = prediction4stage2(
-            data, 
-            predictionMode, 
-            tuneHyperParam, 
-            hyperParam).predictionMode()
-        resultList.append(result)
 
-    prediction = reduce(lambda df1,df2: pd.concat([df1, df2], axis=1), resultList)
-    prediction["mean"] = prediction.mean(axis = 1, numeric_only=True, skipna=True)
-    prediction = prediction.astype(float)
-    prediction = prediction.join(predict[0][["Age"]])
-    prediction = prediction[["mean", "Age"]].applymap(lambda x: antiAgeTransfer(x))
-    prediction = prediction.rename(columns={"mean": "prediction"})
+    data = [model[list(predict.columns)], predict]
+    prediction = prediction4stage2(
+        predictionModule = predictionMode, 
+        data = data, 
+        tuneHyperParam = tuneHyperParam, 
+        hyperParam =hyperParam).predictionMode()
+    prediction = prediction.join(predict[["Age"]])
+    prediction = prediction.applymap(lambda x: antiAgeTransfer(x))
+
     print("prediction", prediction)
-    prediction.to_csv("{}.csv".format(resultName))
+    # prediction.to_csv("{}.csv".format(resultName))
+    prediction.to_csv(resultPath.format(resultName) + "Testing_Prediction.csv")
+
+
+
 

@@ -46,7 +46,6 @@ methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
     ----------
         a dataframe. 
     """ 
-
     cvList = []
     if reconData: 
         for i in range(nfold):
@@ -64,7 +63,7 @@ methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
 
             data4Stage2 = reduce(lambda df1,df2: pd.concat([df1, df2], axis=1), predictionMeanList)
             data4Stage2 = data4Stage2.join(age[["Age"]])
-            print(data4Stage2)
+            # print(data4Stage2)
             # data4Stage2.to_csv(outerPath.format(i))  
             cvList.append(data4Stage2)
         print("data4Stage2 datasets keeping the outer data unseen complete!")
@@ -85,7 +84,6 @@ methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
         data4Stage2 = reduce(lambda df1,df2: pd.concat([df1, df2], axis=1), predictionMeanList)
         data4Stage2 = data4Stage2.join(age[["Age"]])
         print(data4Stage2)
-        data4Stage2.to_csv("{}data4Stage2.csv".format(resultName))
         print("data4Stage2 datasets all data been seen complete!")
-    
     return data4Stage2, cvList
+    

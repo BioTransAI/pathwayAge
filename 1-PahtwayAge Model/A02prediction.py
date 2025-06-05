@@ -7,7 +7,6 @@ import pandas as pd
 import numpy as np
 from sklearn.svm import SVR
 
-
 class prediction(object):
     def __init__(
         self,
@@ -16,7 +15,7 @@ class prediction(object):
         testData: pd.DataFrame,
         tuneHyperParam: boolean,
         hyperParam: dict,
-        showTuningDetails: Optional[boolean] = True
+        showTuningDetails: Optional[boolean] = False
     ):
       self.predictionModule = predictionModule
       self.trainData = trainData
@@ -24,7 +23,7 @@ class prediction(object):
       self.hyperParam = hyperParam
       self.tuneHyperParam = tuneHyperParam
       self.showTuningDetails = showTuningDetails
-      """v
+      """
       
       predictor.
       Provides multiple models to training and testing. 
@@ -85,7 +84,7 @@ class prediction(object):
       trainData = self.trainData.drop(columns=["GOName","Age"])
       if self.tuneHyperParam: 
         if self.hyperParam:
-          print(**self.hyperParam)
+          # print(**self.hyperParam)
           model = SVR(**self.hyperParam)
           Rsearch = RandomizedSearchCV(estimator = model, 
                               param_distributions = self.hyperParam, 
@@ -144,11 +143,11 @@ class prediction(object):
 class prediction4stage2(object):
     def __init__(
         self,
-        data: pd.DataFrame,
+        data: List,
         predictionModule: str,
         tuneHyperParam: boolean,
         hyperParam: dict,
-        showTuningDetails: Optional[boolean] = True
+        showTuningDetails: Optional[boolean] = False
     ):
       self.predictionModule = predictionModule
       self.data = data
