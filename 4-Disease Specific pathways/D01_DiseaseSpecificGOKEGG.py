@@ -17,18 +17,18 @@ def Z_scroe(x, y, U_Test):
     return Z
 
 def loadingData():
-    controlRanking = pd.read_csv("./Result/AgingTrainingRanking.csv", index_col = 0 )
     GO = pd.read_csv("./Result/AgeAccPerGO.csv", index_col = 0)
     GO = GO.drop(columns = ["Tag", "Cohort"]).astype(float).join(GO[["Tag", "Cohort"]])
     KEGG = pd.read_csv("./Result/AgeAccPerKEGG.csv", index_col = 0)
     KEGG = KEGG.drop(columns = ["Tag", "Cohort"]).astype(float).join(GO[["Tag", "Cohort"]])
-    return controlRanking, GO, KEGG
+    return GO, KEGG
 
 def SignificatePathway():
     DiseaseListGO = []
     DiseaseListKEGG = []
     TestList = list(disease_Map.keys())
-    controlRanking, GO, KEGG = loadingData()
+    # demo only, please replace
+    GO, KEGG = loadingData()
     for cohort in TestList:
         SubGO = GO[GO.Cohort.eq(cohort)].dropna()
         if SubGO.shape[0] > 1:
@@ -56,7 +56,7 @@ def SignificatePathway():
                 medianCaseList.append(medianCase)
             Data = pd.DataFrame(data=[pList, U_TestList, meanControllist, meanCaseList, medianControllist, medianCaseList], 
                                 columns=colunmNames, index=["P", "ZScore", "Control Mean", "Case Mean", "Control Median", "Case Median"])
-            Disease = controlRanking.join(Data.T)
+            Disease = Data.T
             Disease["Cohort"] = cohort
             DiseaseListGO.append(Disease)
         
@@ -87,7 +87,7 @@ def SignificatePathway():
                 medianCaseList.append(medianCase)
             Data = pd.DataFrame(data=[pList, U_TestList, meanControllist, meanCaseList, medianControllist, medianCaseList], 
                                 columns=colunmNames, index=["P", "ZScore", "Control Mean", "Case Mean", "Control Median", "Case Median"])
-            Disease = controlRanking.join(Data.T)
+            Disease = Data.T
             Disease["Cohort"] = cohort
             DiseaseListKEGG.append(Disease)
 

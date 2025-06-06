@@ -6,7 +6,7 @@ import json
 from flask import Flask, render_template
 
 # step0 import data
-root = "./GOCluster/{}"
+root = "../Demo Results/GOCluster/{}"
 clusterRandIndexPath = root.format("moduleRandIndex.csv")
 GOAncestorPath = "./Demo Meta Data/GO_Ancestor.csv"
 clusterRandIndex = pd.read_csv(clusterRandIndexPath,  index_col=0)
@@ -57,4 +57,4 @@ GOs = reduce(lambda df1,df2: pd.concat([df1, df2]),  listGO).sort_values(by= ["C
 GOs = GOs.drop(columns=[ "Ancestor", "AncestorGO"])
 print(GOs)
 
-GOs.to_csv("./Result/GOWGCNACluster.csv")
+GOs.to_csv("../Demo Meta Data/GOWGCNACluster.csv")

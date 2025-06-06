@@ -27,6 +27,8 @@ def metaData():
         root = yaml.safe_load(file)
     metaData = root["pathway"]["metaData"]
     golist = metaData.format("golist.json")
+    if pathwayType == "KEGG":
+        golist = metaData.format("kegglist.json")
     cpgAnno = metaData.format("cpgAnno.csv")
     # import data
     cpgAnno = pd.read_csv(cpgAnno, index_col=0)
@@ -41,6 +43,7 @@ def pathwayAge(
     methylData: pd.DataFrame,
     resultName: str,
     methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
+    pathwayType: Optional[str] = "GO",
     restrictUp: Optional[int] = 200,
     restrictDown: Optional[int] = 10,
     minPathSize: Optional[int] = 5,
@@ -80,7 +83,7 @@ def pathwayAge(
     a predicted biological age CSV file.
 
     """
-    cpgAnno, golist= metaData()
+    cpgAnno, golist= metaData(pathwayType)
     methylData["Age"] = methylData["Age"].apply(lambda x: ageTransfer(x))
     age = methylData[["Age"]]
     methyl2PathList = omics2pathlist(
@@ -120,19 +123,6 @@ def pathwayAge(
         )
     else:
         reconData = False
-        data4Stage2Train, _ = stage1(
-                methyl2PathList,
-                age,
-                resultName = resultName, 
-                nfold=nfold,
-                randomState = randomState,
-                predictionMode = predictionMode,
-                reconData = reconData,
-                hyperParam = hyperParam,
-                tuneHyperParam = tuneHyperParam,
-                cores = cores,
-            )
-        data4Stage2Train.to_csv(resultPath.format(resultName) + "TrainingData4Stage2.csv")
         
         methylTestData["Age"] = methylTestData["Age"].apply(lambda x: ageTransfer(x))
         testAge = methylTestData[["Age"]]
@@ -145,8 +135,8 @@ def pathwayAge(
             minPathSize = minPathSize,
         )  
 
-        data4Stage2Test, _ = stage1(
-            methyl2PathTestList,
+        data4Stage2Train, data4Stage2Test = stage1(
+            methyl2PathList,
             age = testAge,
             resultName = resultName, 
             nfold=nfold,
@@ -156,14 +146,15 @@ def pathwayAge(
             hyperParam = hyperParam,
             tuneHyperParam = tuneHyperParam,
             cores = cores,
-            methylTestData = methylTestData
+            omics2pathTestList = methyl2PathTestList
         )
+        data4Stage2Train.to_csv(resultPath.format(resultName) + "TrainingData4Stage2.csv")
         data4Stage2Test.to_csv(resultPath.format(resultName) + "TestingData4Stage2.csv")
 
 
         stage2pediction(
-            predict = data4Stage2Train,
-            model = data4Stage2Test, 
+            predict = data4Stage2Test,
+            model = data4Stage2Train, 
             resultName = resultName,
             # nfold = nfold,
             # randomState = randomState,

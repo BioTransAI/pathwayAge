@@ -2,7 +2,7 @@ library(WGCNA)
 library(cluster)
 
 
-path <- "./AgeAccPerGO.csv"
+path <- "../Demo Results/AgeAccPerGO.csv"
 datExpr <- read.table(path, sep=",", header=TRUE)
 rownames(datExpr) <- datExpr$X
 datExpr$X <-  NULL
@@ -55,7 +55,8 @@ if (file.info(directory_name)$isdir) {
 } else {
   cat("Failed to create the directory:", directory_name, "\n")
 }
-path_out <- "./GOCluster/"
+
+path_out <- "../Demo Results/GOCluster/"
 randIndexResults <- data.frame(CutHeight = numeric(), MinClusterSize = integer(), RandIndex = numeric()) 
 for(cutHeight in cutHeightList) {                                            # Head of first for-loop
   for(minClusterSize in minClusterSizeList) {                                          # Head of nested for-loop

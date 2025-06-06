@@ -7,7 +7,7 @@ import time
 from functools import reduce
 import os
 from pathlib import Path
-from A03data4stage2 import dataForStage2, reconTrainTestData
+from A03data4stage2 import dataForStage2, reconTrainTestData, dataForStage2Prediction
 
 
 def stage1(
@@ -21,7 +21,7 @@ reconData: boolean,
 tuneHyperParam: boolean,
 hyperParam: dict,
 cores: int,
-methylTestData: Optional[pd.DataFrame] = pd.DataFrame(), 
+omics2pathTestList: Optional[List] = [], 
 ):
 
     """stage1
@@ -40,7 +40,7 @@ methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
         hyperParam: Customized hyperparameters;
         i: The ith fold in K-Folds;
         cores: set multiple CPU cores, default 5.
-        methylTestData: testing data, default empty dataframe.
+        omics2pathTestList: testing data,  a list of dataframe, each dataframe contains CpGs of one pathway;
 
     Return
     ----------
@@ -66,11 +66,12 @@ methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
             # print(data4Stage2)
             # data4Stage2.to_csv(outerPath.format(i))  
             cvList.append(data4Stage2)
-        print("data4Stage2 datasets keeping the outer data unseen complete!")
+        print("Outer fold labels remain unseen in training!")
+        return data4Stage2, cvList
 
     else:
         with concurrent.futures.ProcessPoolExecutor(max_workers=cores) as executor:
-            predictionMeanList = list(executor.map(dataForStage2,
+            predictionListTrain = list(executor.map(dataForStage2,
                                             omics2pathlist,
                                             repeat(predictionMode),
                                             repeat(tuneHyperParam),
@@ -81,9 +82,24 @@ methylTestData: Optional[pd.DataFrame] = pd.DataFrame(),
                                             repeat(randomState)
                                             ))
 
-        data4Stage2 = reduce(lambda df1,df2: pd.concat([df1, df2], axis=1), predictionMeanList)
-        data4Stage2 = data4Stage2.join(age[["Age"]])
-        print(data4Stage2)
-        print("data4Stage2 datasets all data been seen complete!")
-    return data4Stage2, cvList
+        data4Stage2Train = reduce(lambda df1,df2: pd.concat([df1, df2], axis=1), predictionListTrain)
+        data4Stage2Train = data4Stage2Train.join(omics2pathlist[0][["Age"]])
+        print(data4Stage2Train.shape)
+        print("all labels are used for training without cross-validation!")
+        
+        dataList = list(zip(omics2pathlist, omics2pathTestList))
+        with concurrent.futures.ProcessPoolExecutor(max_workers=50) as executor:
+            predictionListTest = list(executor.map(dataForStage2Prediction,
+                                            dataList,
+                                            repeat(predictionMode),
+                                            repeat(tuneHyperParam),
+                                            repeat(hyperParam),
+                                            ))
+        data4Stage2Test = reduce(lambda df1,df2: pd.concat([df1, df2], axis=1), predictionListTest)
+        data4Stage2Test = data4Stage2Test.join(age[["Age"]])
+
+        print(data4Stage2Test.shape)
+        print("data4Stage2 testing dataset!")
+        
+        return data4Stage2Train, data4Stage2Test
     

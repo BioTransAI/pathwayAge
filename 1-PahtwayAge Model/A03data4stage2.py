@@ -107,3 +107,22 @@ def dataForStage2(
 
   return predictionMean
 
+def dataForStage2Prediction(
+    dataList: List,
+    predictionMode: str,
+    tuneHyperParam: boolean,
+    hyperParam: dict,
+):
+  """
+  generate the data for stage2. 
+  data: a dataframe contains CpG in one pathway;
+  sampleMode: "CrossValidation" or "bootstraping";
+  predictionMode: can be swithed for different tasks, here we ues "Ridge";
+  i: ith fold of cross validation;
+  return: a dataframe -> prediction mean based on nfold inner training data models.
+  """
+  (trainingData, testingData) = dataList 
+  result = prediction(predictionMode, trainingData, testingData, tuneHyperParam, hyperParam).predictionMode()  
+  return result
+
+

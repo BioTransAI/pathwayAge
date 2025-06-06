@@ -40,26 +40,31 @@ def LR(data):
 # import data 
 def loadingData():
 
-    GOPrediction =  pd.read_csv("./Result/PredictionAge.csv", index_col = 0)
-    KEGGPrediction =  pd.read_csv("./Result/PredictionAge.csv", index_col = 0)
+    GOPrediction =  pd.read_csv("../Demo Results/DemoTesting_Prediction.csv", index_col = 0)
+    KEGGPrediction =  pd.read_csv("../Demo Results/DemoTesting_Prediction.csv", index_col = 0)
     GOPrediction = GOPrediction.rename(columns= {"prediction": "PathwayAge(GO)"})
     KEGGPrediction = KEGGPrediction.rename(columns= {"prediction": "PathwayAge(KEGG)"})
     pathwayAge = GOPrediction.drop(columns = ["Age"]).join(KEGGPrediction)
-    confunder = pd.read_csv("./Demo Meta Data/CovariateData.csv")
+    confunder = pd.read_pickle("../Demo Meta Data/covariateData.pickle")
 
-    otherClockAge = ['DNAmAge', 'DNAmAgeHannum','DNAmPhenoAge', 'DNAmGrimAgeBasedOnRealAge', 'Epigenetic Age (Zhang)']
-    otherClock = confunder[otherClockAge].fillna(0)
+    # otherClockAge = ['DNAmAge', 'DNAmAgeHannum','DNAmPhenoAge', 'DNAmGrimAgeBasedOnRealAge', 'Epigenetic Age (Zhang)']
+    otherClock = pd.read_pickle("../Demo Meta Data/OtherClock.pickle")
     pathwayAge = pathwayAge[pathwayAge.Age.ge(18) & pathwayAge.Age.le(80)]
     pathwayAge = pathwayAge.join(confunder[["Label", "Cohort"]])
     pathwayAge["Label"] = pathwayAge["Label"].apply(pd.to_numeric, errors='coerce')
     otherClockTest = pathwayAge.join(otherClock)
-    print(otherClockTest)
-    return otherClockTest
+    otherClockTest = otherClockTest.drop(columns = ["Cohort"] )
+    Demo = pd.concat([otherClockTest.astype(float) + 1, otherClockTest])
+    Demo = Demo.join(pathwayAge.Cohort)
+    # print(Demo)
+    return Demo
 
 # Test whether the case has a significant effect on age acceleration.
 def testAgeAccInCase():
+    confunder = pd.read_pickle("../Demo Meta Data/covariateData.pickle")
     methodList = ["PathwayAge(GO)", "PathwayAge(KEGG)", 'DNAmAge', 'DNAmAgeHannum','DNAmPhenoAge', 'DNAmGrimAgeBasedOnRealAge', 'Epigenetic Age (Zhang)']
     resultList = []
+    ## for demo only, please replace this 
     otherClockTest = loadingData()
     for method in methodList:
         TestSub = otherClockTest.rename(columns = {method: "prediction"})
@@ -71,14 +76,14 @@ def testAgeAccInCase():
             caseOriginal = prediction[prediction.Label.ne(0)].drop(columns= ["Label", "Cohort"]).dropna()
             
             if len(prediction.Label.unique()) > 1:
-                confunderTest = cofunder[[
-                    'Smoking', 'Female', "Age", "Batch",
+                confunderTest = confunder[[
+                    'Smoking', 'Female', "Batch",
                     'CD8.naive','CD8pCD28nCD45RAn', 'PlasmaBlast', 'CD4T', 'NK', 'Mono', 'Gran',
                     'population_0', 'population_1', 'population_2', 'population_3', 'population_4', 'population_5',
                     'population_6', 'population_7', 'population_8', 'population_9'
                     ]]
-                cofunder  = confunderTest.drop(columns = ["Age"])
-                Full = cofunder
+
+                Full = confunderTest
                 cellComposition = ['CD8.naive', 'CD8pCD28nCD45RAn', 'PlasmaBlast', 'CD4T', 'NK', 'Mono', 'Gran', "Batch"]
 
                 if cohort in [ 
@@ -130,7 +135,7 @@ def testAgeAccInCase():
         result[method] = result.Full
         resultList.append(result[[method, "Data"]])
     AllClock = reduce(lambda df1,df2: pd.concat([df1.drop(columns = ["Data"]), df2], axis = 1),  resultList)
-    print(AllClock)
+    # print(AllClock)
 
     return AllClock
         

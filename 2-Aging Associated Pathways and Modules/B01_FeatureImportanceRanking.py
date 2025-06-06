@@ -66,100 +66,55 @@ def AgeAccelerationResidual(
     control[method] = control["prediction"] - control["LRPrediction"]
     return control, case
 
-def evaluationControl():
 
-    predictionResult = "./Result/PredictionAge.csv"
-    predictionResult = pd.read_csv(predictionResult, index_col=0)
-
-    cofunder = "./Demo Meta Data/CovariateData.csv"
-    cofunder = pd.read_csv(cofunder, index_col="Sample")
+def AgeAcc(predictionResult, cofunder): 
 
     label = cofunder[["Label"]].astype(int)
-    prediction = label.join(predictionResult)
+    prediction = label.join(predictionResult).dropna()
     controlOriginal = prediction[prediction.Label.eq(0)].drop(columns="Label")
-    mean_squared_error, mean_absolute_error, r2_score, dataCorr = evaluation(controlOriginal)
-    data = [mean_squared_error,mean_absolute_error,r2_score, dataCorr]
-    Control = pd.DataFrame(data=data, columns = ["Training"], index=["MSE", "MAE", "R2", "Rho"])
-    Control["Tag"] = "Control" 
+    caseOriginal = prediction[prediction.Label.eq(1)].drop(columns="Label")
+    caseOriginalShape = caseOriginal.shape[0]
+    if caseOriginalShape == 0 :
+        caseOriginal = controlOriginal
 
-    return Control
-
-def AgeAcc(): 
-
-    cofunder = "./Demo Meta Data/CovariateData.csv"
-    cofunder = pd.read_csv(cofunder, index_col="Sample")
-    cofunder = cofunder.drop(columns = ["Age", "Label"])
-
-    predictionResult = "./Result/PredictionAge.csv"
-    predictionResult = pd.read_csv(predictionResult, index_col=0)
-
-    label = cofunder[["Label"]].astype(int)
-    prediction = label.join(predictionResult)
-    controlOriginal = prediction[prediction.Label.eq(0)].drop(columns="Label")
-
+    cofunder = cofunder.drop(columns = ["Age", "Label", "Cohort"])
     Full = cofunder
-    basic = cofunder[["Female", "CohortTag"]]
-    cellComposition = ['CD8.naive', 'CD8pCD28nCD45RAn', 'PlasmaBlast', 'CD4T', 'NK', 'Mono', 'Gran', 'CohortTag']
-    cellCount = cofunder[cellComposition]
-
-    controlAA = LR(controlOriginal)
-    caseAA = controlAA
-
-    controlCellCount = controlOriginal.join(cellCount)
-    controlIEAA = LR(controlCellCount)
-    caseIEAA = controlIEAA
-
-    controlBasic = controlOriginal.join(basic)
-    controlBasic = LR(controlBasic)
-    caseBasic = controlBasic
-
+    
     controlFull = controlOriginal.join(Full)
     controlFull = LR(controlFull)
     caseFull = controlFull
 
-
-    controlAA, caseAA = AgeAccelerationResidual(controlAA, caseAA, "AA")
-    controlBasic, caseBasic = AgeAccelerationResidual(controlBasic, caseBasic, "Basic")
-    controlIEAA, caseIEAA = AgeAccelerationResidual(controlIEAA, caseIEAA, "IEAA")
+    caseFull = caseOriginal.join(Full)
+    caseFull = LR(caseFull)
+    
     controlFull, caseFull = AgeAccelerationResidual(controlFull, caseFull, "Full")
 
-    controlAA["Basic"] = controlBasic["Basic"]
-    caseAA["Basic"] = caseBasic["Basic"]
-    controlAA["IEAA"] = controlIEAA["IEAA"]
-    caseAA["IEAA"] = caseIEAA["IEAA"]
-    controlAA["Full"] = controlFull["Full"]
-    caseAA["Full"] = caseFull["Full"]
+    controlFull["Tag"] = "Control"
+    caseFull["Tag"] = "Case"
 
-    caseAA["Tag"] = "Case"
-    controlAA["Tag"] = "Control"
+    ageGapFullAdjusted = pd.concat([controlFull, caseFull])
 
-    ageGapFullAdjusted = controlAA
-    print(ageGapFullAdjusted)
+    if caseOriginalShape == 0 :
+        ageGapFullAdjusted = controlFull
 
-    return ageGapFullAdjusted
+    return ageGapFullAdjusted[["Full", "Tag"]]
 
-def AgeAccPerGO():
+def AgeAccPerGO(data4Stage2, cofunder):
     AgeGapList = []
-    data4Stage2 = './Result/Data4Stage2Sub.csv'
-    data4Stage2 = pd.read_csv(data4Stage2, index_col=0)   
-    data4Stage2 = data4Stage2.drop(columns= ["Age"]) 
-    print(data4Stage2)  
-
-    cofunder = "./Demo Meta Data/CovariateData.csv"
-    cofunder = pd.read_csv(cofunder, index_col="Sample") 
 
     for col in data4Stage2.columns:
-        Full = cofunder
+        Full = cofunder.drop(columns = ["Label", "Cohort"])
+        # print("confounder: ", Full.columns)
         controlFull = data4Stage2[[col]].join(Full).dropna()   
         controlFull = LRWithCol(controlFull, col)
         controlFull = controlFull.astype(float)
         controlFull["Full"] = controlFull[col] - controlFull["LRPrediction"]
         controlFull = controlFull[["Full"]].rename(columns={"Full": col})
-        print(col)
+        # print(col)
         AgeGapList.append(controlFull)
     AgeGapGO = pd.concat(AgeGapList, axis=1)
-    AgeGapGO.to_csv("./Result/AgeAccPerGOSub.csv")
-    print(AgeGapGO)
+    AgeGapGO.to_csv("../Demo Results/AgeAccPerGO.csv")
+
     return AgeGapGO
 
 def AgeAccCorrWithGO():
@@ -172,8 +127,8 @@ def AgeAccCorrWithGO():
                                     index=correlationControl.index,
                                     columns=["Rho"])
 
-    readRDS = r['readRDS']
-    goDescription = readRDS('./Demo Meta Data/GO_Description.rds')
+
+    goDescription = pd.read_csv('../Demo Meta Data/GO_Description.csv', index_col = 0)
     goDescription = dict(zip(goDescription.names, map(list,list(goDescription))))
     correlationControl["Description"] = [goDescription[keys][0] for keys in correlationControl.index]
     #check the correlation -+ 
@@ -186,32 +141,7 @@ def AgeAccCorrWithGO():
 
     return correlationControl
 
-def GORankingPlot():
-    # data for plot Bubble plot
-    golist = "./Demo Meta Data/golist.json"
-    with open(golist) as json_file:
-        golist = json.load(json_file)
 
-    correlationControl = AgeAccCorrWithGO()
-    correlationControlTop20 = correlationControl.nlargest(20,"RhoAbs")
-    correlationControlTop20["GeneCount"] = [len(value) for key, value in golist.items() for index in correlationControlTop20.index if (key == index)]
-    plotTag = pd.read_excel("./Demo Meta Data/plotTag.xlsx", index_col=0)
-    correlationControlTop20 = correlationControlTop20.join(plotTag)
-    print(correlationControlTop20)
-    # correlationControlTop20.to_excel("Temp.xlsx")
-    coloMap = {
-        "developmental process":"#7FB3D5", 
-        "metabolic process":"#BC8B56", 
-        "response to stimulus": "#F6E758", 
-        "cellular process" :"#6D936E",
-        "biological regulation" :"#949b9b",
-        "localization": "#8c7e78",
-        "multicellular organismal process": "#3c4444"
-        }
-
-    correlationControlTop20["color"] = correlationControlTop20["Tag"].replace(coloMap)
-    correlationControlTop20 = correlationControlTop20.sort_values(by = ["RhoAbs"], ascending= True)
-    correlationControlTop20.to_csv("./Result/GORankSub.csv", index=False)
 
 
 
