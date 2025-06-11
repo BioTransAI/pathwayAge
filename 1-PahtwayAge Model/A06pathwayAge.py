@@ -16,7 +16,7 @@ with open('./config.yml', 'r') as file:
 
 resultPath = root["pathway"]["result"]
 
-def metaData():
+def metaData(pathwayType):
     """
     return:
         cpgAnno: a dataframe maping CpGs to genes
