@@ -3,6 +3,8 @@ PathwayAge
 
 We present PathwayAge, a biologically-informed, machine learning-based epigenetic clock that integrates pathway-level biological data to predict biological age and assess disease-related risks. 
 
+For business reasons, the core algorithm is currently available on a separate GitHub repository. If you are conducting research and would like access, please feel free to reach out via email pan.Li.1122@proton.me.
+
  <!-- ![](Image/pathwayAgeProcess.png) -->
 
 Repository Structure
